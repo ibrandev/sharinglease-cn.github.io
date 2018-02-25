@@ -7,14 +7,14 @@
       	<link rel="stylesheet" type="text/css" href="css/style.css"/>
       	<script type="text/javascript" charset="utf-8" src="http://cdn.bootcss.com/jquery/3.0.0-rc1/jquery.min.js"></script>
       	<script type="text/javascript">
-          
+
         		function GetQueryString(name)
         		{
         		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
         		     var r = window.location.search.substr(1).match(reg);
         		     if(r!=null)return  unescape(r[2]); return null;
         		}
-        		
+
         		// 页面启动获取参数
         		$(document).ready(function(){
              //do something
@@ -23,7 +23,7 @@
                               window.location.replace('http://www.sharinglease.com');
 //                             self.location = 'www.sharinglease.com';
                         })
-        
+
             // 获取参数
         		function GetPatams()
         		{
@@ -40,10 +40,10 @@ var country = document.getElementById("country");
 country.value = GetQueryString("country");
 var leasor = document.getElementById("leasor");
 leasor.value = GetQueryString("leasor");
-    
+
 
         		}
-        		
+
         		// 获取参数2
         		function GetPatams2()
         		{
@@ -52,13 +52,13 @@ leasor.value = GetQueryString("leasor");
         		  var user_phone = document.getElementById("phone_number").value;
               txt.innerHTML = user_phone;
         		}
-        		
+
         		function checkTel(tel)
             {
                var mobile = /^1[3|5|6|8|9]\d{9}$/;
                return mobile.test(tel);
             }
-        		
+
         		function checkCode(code)
             {
                var yzm = /^\d{6}$/;
@@ -72,25 +72,25 @@ leasor.value = GetQueryString("leasor");
         		  var user_phone = document.getElementById("phone_number").value;
               user_name_node.value = GetQueryString("id");
         		}
-        
+
             var delay = 60;
-            var countdown=delay; 
-            function settime(val) { 
-                if (countdown == 0) { 
+            var countdown=delay;
+            function settime(val) {
+                if (countdown == 0) {
                     val.removeAttribute("disabled");
-                    val.value="获取验证码"; 
-                    countdown = delay; 
+                    val.value="获取验证码";
+                    countdown = delay;
                     return;
                 } else {
-                    val.setAttribute("disabled", true); 
-                    val.value= countdown + "S"; 
-                    countdown--; 
-                } 
-                setTimeout(function() { 
-                    settime(val) 
-                },1000) 
-            } 
-        
+                    val.setAttribute("disabled", true);
+                    val.value= countdown + "S";
+                    countdown--;
+                }
+                setTimeout(function() {
+                    settime(val)
+                },1000)
+            }
+
             // POST 发送验证码
             function GenerateCode(val)
             {
@@ -99,7 +99,7 @@ leasor.value = GetQueryString("leasor");
               if ( checkTel(phone_number) )
               {
                   $.post("http://api.soloman.org.cn/API/v2/users/verification_code_sms", {'login':phone_number},function(data){
-                      alert(data.message); 
+                      alert(data.message);
                   }, "json");
                   countdown = delay;
                   settime(val);
@@ -108,7 +108,7 @@ leasor.value = GetQueryString("leasor");
                   alert("请输入正确的电话号码！");
               }
             }
-            
+
             // POST 发送推广记录
             function submit2()
             {
@@ -121,7 +121,7 @@ leasor.value = GetQueryString("leasor");
                     if (checkCode(code))
                     {
                         $.post("http://api.soloman.org.cn/API/v2/extends/record", {'extend_code':extend_code,'phone_number':phone_number,'code':code},function(data){
-                            alert(data.message); 
+                            alert(data.message);
                             if (200 == data.code)
                             {
                                  window.location.href = "http://api.soloman.org.cn/download";
@@ -137,7 +137,7 @@ leasor.value = GetQueryString("leasor");
                     alert("请输入正确的电话号码！");
                 }
             }
-            
+
             // POST 获取activity_rule
             function get_activity_rule()
             {
@@ -153,10 +153,10 @@ leasor.value = GetQueryString("leasor");
               //alert('发送完成');
             }
         </script>
-    
+
     </head>
     <body>
-     
+
         	 <!--<input type="button" value="获取参数" onclick="GetPatams()" /><br />-->
     </body>
 </html>
