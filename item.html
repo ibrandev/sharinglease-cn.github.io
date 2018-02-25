@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+      	<meta charset="UTF-8">
+      	<title>Item</title>
+      	<meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+      	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+      	<script type="text/javascript" charset="utf-8" src="http://cdn.bootcss.com/jquery/3.0.0-rc1/jquery.min.js"></script>
+      	<script type="text/javascript">
+          
+        		function GetQueryString(name)
+        		{
+        		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        		     var r = window.location.search.substr(1).match(reg);
+        		     if(r!=null)return  unescape(r[2]); return null;
+        		}
+        		
+        		// 页面启动获取参数
+        		$(document).ready(function(){
+             //do something
+//              GetPatams();
+//              get_activity_rule();
+                              window.location.replace('http://www.sharinglease.com');
+//                             self.location = 'www.sharinglease.com';
+                        })
+        
+            // 获取参数
+        		function GetPatams()
+        		{
+//      		  alert('获取传入参数');
+        		  var extend_code = document.getElementById("extend_code");
+                          extend_code.value = GetQueryString("q");
+
+
+var u = document.getElementById("u");
+u.value = GetQueryString("u");
+var type = document.getElementById("type");
+type.value = GetQueryString("type");
+var country = document.getElementById("country");
+country.value = GetQueryString("country");
+var leasor = document.getElementById("leasor");
+leasor.value = GetQueryString("leasor");
+    
+
+        		}
+        		
+        		// 获取参数2
+        		function GetPatams2()
+        		{
+        		  //alert('Checkpoint2');
+        		  var txt = document.getElementById("txt");
+        		  var user_phone = document.getElementById("phone_number").value;
+              txt.innerHTML = user_phone;
+        		}
+        		
+        		function checkTel(tel)
+            {
+               var mobile = /^1[3|5|6|8|9]\d{9}$/;
+               return mobile.test(tel);
+            }
+        		
+        		function checkCode(code)
+            {
+               var yzm = /^\d{6}$/;
+               return yzm.test(code);
+            }
+
+        		// test
+        		function GenerateCodetest()
+        		{
+        		  var user_name_node = document.getElementById("phone_number");
+        		  var user_phone = document.getElementById("phone_number").value;
+              user_name_node.value = GetQueryString("id");
+        		}
+        
+            var delay = 60;
+            var countdown=delay; 
+            function settime(val) { 
+                if (countdown == 0) { 
+                    val.removeAttribute("disabled");
+                    val.value="获取验证码"; 
+                    countdown = delay; 
+                    return;
+                } else {
+                    val.setAttribute("disabled", true); 
+                    val.value= countdown + "S"; 
+                    countdown--; 
+                } 
+                setTimeout(function() { 
+                    settime(val) 
+                },1000) 
+            } 
+        
+            // POST 发送验证码
+            function GenerateCode(val)
+            {
+              //alert('开始发送');
+              var phone_number = document.getElementById("phone_number").value;
+              if ( checkTel(phone_number) )
+              {
+                  $.post("http://api.soloman.org.cn/API/v2/users/verification_code_sms", {'login':phone_number},function(data){
+                      alert(data.message); 
+                  }, "json");
+                  countdown = delay;
+                  settime(val);
+              }
+              else {
+                  alert("请输入正确的电话号码！");
+              }
+            }
+            
+            // POST 发送推广记录
+            function submit2()
+            {
+                //alert('开始发送');
+                var extend_code = document.getElementById("extend_code").value;
+                var phone_number = document.getElementById("phone_number").value;
+                var code = document.getElementById("code").value;
+                if ( checkTel(phone_number) )
+                {
+                    if (checkCode(code))
+                    {
+                        $.post("http://api.soloman.org.cn/API/v2/extends/record", {'extend_code':extend_code,'phone_number':phone_number,'code':code},function(data){
+                            alert(data.message); 
+                            if (200 == data.code)
+                            {
+                                 window.location.href = "http://api.soloman.org.cn/download";
+                            }
+                        }, "json");
+                        //alert('发送完成');
+                    }
+                    else {
+                        alert("请输入六位验证码！");
+                    }
+                 }
+                else {
+                    alert("请输入正确的电话号码！");
+                }
+            }
+            
+            // POST 获取activity_rule
+            function get_activity_rule()
+            {
+              //alert('开始发送');
+              var extend_code = document.getElementById("extend_code").value;
+              $.get("http://api.soloman.org.cn/API/v2/extends/activity_rule", {'extend_code':extend_code},function(data){
+                  //alert(data.message);
+                  //alert(data.data.activity_rule);
+                  var replaceStr = "\n";
+                  //alert(data.data.activity_rule.replace(new RegExp(replaceStr,'gm'),'<br/>'));
+                  document.getElementById("activity_rule").innerHTML=data.data.activity_rule.replace(new RegExp(replaceStr,'gm'),'<br/>');
+              }, "json");
+              //alert('发送完成');
+            }
+        </script>
+    
+    </head>
+    <body>
+     
+        	 <!--<input type="button" value="获取参数" onclick="GetPatams()" /><br />-->
+    </body>
+</html>
